@@ -1693,7 +1693,6 @@ void modbus_close(modbus_t *ctx)
 {
     if (ctx == NULL)
         return;
-
     ctx->backend->close(ctx);
 }
 
@@ -1701,7 +1700,6 @@ void modbus_free(modbus_t *ctx)
 {
     if (ctx == NULL)
         return;
-
     ctx->backend->free(ctx);
 }
 

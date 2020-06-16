@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = qModMaster
@@ -25,6 +25,7 @@ SOURCES += src/main.cpp \
     3rdparty/libmodbus/modbus-data.c \
     3rdparty/libmodbus/modbus-tcp.c \
     3rdparty/libmodbus/modbus-rtu.c \
+    3rdparty/libmodbus/modbus-rtutcp.c \
     src/rawdatadelegate.cpp \
     src/registersdatadelegate.cpp \
     src/modbuscommsettings.cpp \
@@ -32,11 +33,18 @@ SOURCES += src/main.cpp \
     3rdparty/QsLog/QsLog.cpp \
     3rdparty/QsLog/QsLogDestConsole.cpp \
     3rdparty/QsLog/QsLogDestFile.cpp \
-    src/infobar.cpp \
-    forms/tools.cpp
+    src/infobar.cpp
 
 HEADERS  += src/mainwindow.h \
     3rdparty/libmodbus/modbus.h \
+    3rdparty/libmodbus/modbus-version.h \
+    3rdparty/libmodbus/modbus-private.h \
+    3rdparty/libmodbus/modbus-rtu.h \
+    3rdparty/libmodbus/modbus-rtu-private.h \
+    3rdparty/libmodbus/modbus-tcp.h \
+    3rdparty/libmodbus/modbus-tcp-private.h \
+    3rdparty/libmodbus/modbus-rtutcp.h \
+    3rdparty/libmodbus/modbus-rtutcp-private.h \
     forms/about.h \
     forms/settingsmodbusrtu.h \
     forms/settingsmodbustcp.h \
@@ -55,8 +63,7 @@ HEADERS  += src/mainwindow.h \
     3rdparty/QsLog/QsLogLevel.h \
     3rdparty/QsLog/QsLogDisableForThisFile.h \
     3rdparty/QsLog/QsLogDestFile.h \
-    src/infobar.h \
-    forms/tools.h
+    src/infobar.h
 
 INCLUDEPATH += 3rdparty/libmodbus \
     3rdparty/QsLog
@@ -86,8 +93,7 @@ FORMS    += forms/mainwindow.ui \
     forms/settingsmodbusrtu.ui \
     forms/settingsmodbustcp.ui \
     forms/settings.ui \
-    forms/busmonitor.ui \
-    forms/tools.ui
+    forms/busmonitor.ui
 
 RESOURCES += \
     icons/icons.qrc \

@@ -24,17 +24,6 @@ ModbusAdapter::ModbusAdapter(QObject *parent) :
     m_errors = 0;
     connect(m_pollTimer,SIGNAL(timeout()),this,SLOT(modbusTransaction()));
     connect(regModel,SIGNAL(refreshView()),this,SIGNAL(refreshView()));
-    //setup memory for data
-    dest = (uint8_t *) malloc(2000 * sizeof(uint8_t));
-    memset(dest, 0, 2000 * sizeof(uint8_t));
-    dest16 = (uint16_t *) malloc(125 * sizeof(uint16_t));
-    memset(dest16, 0, 125 * sizeof(uint16_t));
-}
-
-ModbusAdapter::~ModbusAdapter()
-{
-    free(dest);
-    free(dest16);
 }
 
 void ModbusAdapter::modbusConnectRTU(QString port, int baud, QChar parity, int dataBits, int stopBits, int RTS, int timeOut)
@@ -47,7 +36,7 @@ void ModbusAdapter::modbusConnectRTU(QString port, int baud, QChar parity, int d
 
     m_modbus = modbus_new_rtu(port.toLatin1().constData(),baud,parity.toLatin1(),dataBits,stopBits,RTS);
     line = "Connecting to Serial Port [" + port + "]...";
-    QLOG_TRACE() <<  line;
+    QLOG_INFO() <<  line;
 
     //Debug messages from libmodbus
     #ifdef LIB_MODBUS_DEBUG_OUTPUT
@@ -63,12 +52,14 @@ void ModbusAdapter::modbusConnectRTU(QString port, int baud, QChar parity, int d
     }
     else if(m_modbus && modbus_set_slave(m_modbus, m_slave) == -1){
         modbus_free(m_modbus);
+        m_modbus = nullptr;
         mainWin->showUpInfoBar(tr("Invalid slave ID."), InfoBar::Error);
         QLOG_ERROR()<<  "Connection failed. Invalid slave ID";
         return;
     }
     else if(m_modbus && modbus_connect(m_modbus) == -1) {
         modbus_free(m_modbus);
+        m_modbus = nullptr;
         mainWin->showUpInfoBar(tr("Connection failed\nCould not connect to serial port."), InfoBar::Error);
         QLOG_ERROR()<<  "Connection failed. Could not connect to serial port";
         m_connected = false;
@@ -82,7 +73,7 @@ void ModbusAdapter::modbusConnectRTU(QString port, int baud, QChar parity, int d
         m_connected = true;
         line += "OK";
         mainWin->hideInfoBar();
-        QLOG_TRACE() << line;
+        QLOG_INFO() << line;
     }
 
     m_ModBusMode = EUtils::RTU;
@@ -103,7 +94,7 @@ void ModbusAdapter::modbusConnectTCP(QString ip, int port, int timeOut)
     QLOG_INFO()<<  "Modbus Connect TCP";
 
     line = "Connecting to IP : " + ip + ":" + QString::number(port);
-    QLOG_TRACE() <<  line;
+    QLOG_INFO() <<  line;
     strippedIP = stripIP(ip);
     if (strippedIP == ""){
         mainWin->showUpInfoBar(tr("Connection failed\nBlank IP Address."), InfoBar::Error);
@@ -113,7 +104,7 @@ void ModbusAdapter::modbusConnectTCP(QString ip, int port, int timeOut)
     else {
         m_modbus = modbus_new_tcp(strippedIP.toLatin1().constData(), port);
         mainWin->hideInfoBar();
-        QLOG_TRACE() <<  "Connecting to IP : " << ip << ":" << port;
+        QLOG_INFO() <<  "Connecting to IP : " << ip << ":" << port;
     }
 
     //Debug messages from libmodbus
@@ -130,6 +121,7 @@ void ModbusAdapter::modbusConnectTCP(QString ip, int port, int timeOut)
     }
     else if(m_modbus && modbus_connect(m_modbus) == -1) {
         modbus_free(m_modbus);
+        m_modbus = nullptr;
         mainWin->showUpInfoBar(tr("Connection failed\nCould not connect to TCP port."), InfoBar::Error);
         QLOG_ERROR()<<  "Connection to IP : " << ip << ":" << port << "...failed. Could not connect to TCP port";
         m_connected = false;
@@ -143,7 +135,7 @@ void ModbusAdapter::modbusConnectTCP(QString ip, int port, int timeOut)
         m_connected = true;
         line += " OK";
         mainWin->hideInfoBar();
-        QLOG_TRACE() << line;
+        QLOG_INFO() << line;
     }
 
     m_ModBusMode = EUtils::TCP;
@@ -154,6 +146,67 @@ void ModbusAdapter::modbusConnectTCP(QString ip, int port, int timeOut)
 
 }
 
+void ModbusAdapter::modbusConnectRTUTCP(QString ip, int port, int timeOut)
+{
+    //Modbus TCP connect
+    QString strippedIP = "";
+    QString line;
+    modbusDisConnect();
+
+    QLOG_INFO()<<  "Modbus Connect RTUTCP";
+
+    line = "Connecting to IP : " + ip + ":" + QString::number(port);
+    QLOG_INFO() <<  line;
+    strippedIP = stripIP(ip);
+    if (strippedIP == ""){
+        mainWin->showUpInfoBar(tr("Connection failed\nBlank IP Address."), InfoBar::Error);
+        QLOG_ERROR()<<  "Connection failed. Blank IP Address";
+        return;
+    }
+    else {
+        m_modbus = modbus_new_rtutcp(strippedIP.toLatin1().constData(), port);
+        mainWin->hideInfoBar();
+        QLOG_INFO() <<  "Connecting to IP : " << ip << ":" << port;
+    }
+
+    //Debug messages from libmodbus
+    #ifdef LIB_MODBUS_DEBUG_OUTPUT
+        modbus_set_debug(m_modbus, 1);
+    #endif
+
+    m_timeOut = timeOut;
+
+    if(m_modbus == NULL){
+        mainWin->showUpInfoBar(tr("Unable to create the libmodbus context."), InfoBar::Error);
+        QLOG_ERROR()<<  "Connection failed. Unable to create the libmodbus context";
+        return;
+    }
+    else if(m_modbus && modbus_connect(m_modbus) == -1) {
+        modbus_free(m_modbus);
+        m_modbus = nullptr;
+        mainWin->showUpInfoBar(tr("Connection failed\nCould not connect to TCP port."), InfoBar::Error);
+        QLOG_ERROR()<<  "Connection to IP : " << ip << ":" << port << "...failed. Could not connect to TCP port";
+        m_connected = false;
+        line += " Failed";
+    }
+    else {
+        //error recovery mode
+        modbus_set_error_recovery(m_modbus, MODBUS_ERROR_RECOVERY_PROTOCOL);
+        //response_timeout;
+        modbus_set_response_timeout(m_modbus, timeOut, 0);
+        m_connected = true;
+        line += " OK";
+        mainWin->hideInfoBar();
+        QLOG_INFO() << line;
+    }
+
+    m_ModBusMode = EUtils::RTUTCP;
+
+    //Add line to raw data model
+    line = EUtils::SysTimeStamp() + " - " + line;
+    rawModel->addLine(line);
+
+}
 
 void ModbusAdapter::modbusDisConnect()
 {
@@ -162,10 +215,8 @@ void ModbusAdapter::modbusDisConnect()
     QLOG_INFO()<<  "Modbus disconnected";
 
     if(m_modbus) {
-        if (m_connected){
-            modbus_close(m_modbus);
-            modbus_free(m_modbus);
-        }
+        modbus_close(m_modbus);
+        modbus_free(m_modbus);
         m_modbus = NULL;
     }
 
@@ -223,6 +274,9 @@ void ModbusAdapter::modbusReadData(int slave, int functionCode, int startAddress
 
     if(m_modbus == NULL) return;
 
+    uint8_t dest[1024]; //setup memory for data
+    uint16_t * dest16 = (uint16_t *) dest;
+    memset(dest, 0, 1024);
     int ret = -1; //return value from read functions
     bool is16Bit = false;
 
@@ -252,7 +306,7 @@ void ModbusAdapter::modbusReadData(int slave, int functionCode, int startAddress
                     break;
     }
 
-    QLOG_TRACE() <<  "Modbus Read Data return value = " << ret << ", errno = " << errno;
+    QLOG_INFO() <<  "Modbus Read Data return value = " << ret << ", errno = " << errno;
 
     //update data model
     if(ret == noOfItems)
@@ -340,7 +394,7 @@ void ModbusAdapter::modbusWriteData(int slave, int functionCode, int startAddres
                     break;
     }
 
-    QLOG_TRACE() <<  "Modbus Write Data return value = " << ret << ", errno = " << errno;;
+    QLOG_INFO() <<  "Modbus Write Data return value = " << ret << ", errno = " << errno;;
 
     //update data model
     if(ret == noOfItems)
@@ -375,7 +429,7 @@ void ModbusAdapter::modbusWriteData(int slave, int functionCode, int startAddres
 
 }
 
-void ModbusAdapter::busMonitorRequestData(uint8_t * data, int dataLen)
+void ModbusAdapter::busMonitorRequestData(uint8_t * data, uint8_t dataLen)
 {
 
     //Request Raw data from port - Update raw data model
@@ -394,7 +448,7 @@ void ModbusAdapter::busMonitorRequestData(uint8_t * data, int dataLen)
     m_transactionIsPending = true;
 
 }
-void ModbusAdapter::busMonitorResponseData(uint8_t * data, int dataLen)
+void ModbusAdapter::busMonitorResponseData(uint8_t * data, uint8_t dataLen)
 {
 
     //Response Raw data from port - Update raw data model
@@ -514,12 +568,12 @@ QString ModbusAdapter::stripIP(QString ip)
 
 extern "C" {
 
-void busMonitorRawResponseData(uint8_t * data, int dataLen)
+void busMonitorRawResponseData(uint8_t * data, uint8_t dataLen)
 {
         m_instance->busMonitorResponseData(data, dataLen);
 }
 
-void busMonitorRawRequestData(uint8_t * data, int dataLen)
+void busMonitorRawRequestData(uint8_t * data, uint8_t dataLen)
 {
         m_instance->busMonitorRequestData(data, dataLen);
 }

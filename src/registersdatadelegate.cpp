@@ -83,7 +83,7 @@ void RegistersDataDelegate::setModelData(QWidget *editor, QAbstractItemModel *mo
     if (m_base == 2 && !m_is16Bit) {//Bin
         QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
         intVal = (spinBox->text()).toInt(&ok,m_base);
-        value = EUtils::formatValue(intVal, m_frmt, m_is16Bit, m_isSigned);
+        value = EUtils::formatValue(intVal, m_frmt, m_is16Bit);
     }
     else { //Bin 16 Bit,Dec, Hex
         QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
@@ -102,10 +102,10 @@ void RegistersDataDelegate::setModelData(QWidget *editor, QAbstractItemModel *mo
         {
             mainWin->hideInfoBar();
         }
-        value = EUtils::formatValue(intVal, m_frmt, m_is16Bit, m_isSigned);
+        value = EUtils::formatValue(intVal, m_frmt, m_is16Bit);
     }
 
-    QLOG_TRACE() <<  "Set model data value = " << value;
+    QLOG_INFO() <<  "Set model data value = " << value;
 
     model->setData(index, value, Qt::EditRole);
 }
@@ -128,12 +128,5 @@ void RegistersDataDelegate::setIs16Bit(bool is16Bit)
 {
 
     m_is16Bit = is16Bit;
-
-}
-
-void RegistersDataDelegate::setIsSigned(bool isSigned)
-{
-
-    m_isSigned = isSigned;
 
 }

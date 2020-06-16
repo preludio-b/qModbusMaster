@@ -147,6 +147,7 @@ static uint16_t crc16(uint8_t *buffer, uint16_t buffer_length)
 
 static int _modbus_rtu_prepare_response_tid(const uint8_t *req, int *req_length)
 {
+    (void)req;
     (*req_length) -= _MODBUS_RTU_CHECKSUM_LENGTH;
     /* No TID */
     return 0;
@@ -340,6 +341,7 @@ static int _modbus_rtu_pre_check_confirmation(modbus_t *ctx, const uint8_t *req,
 {
     /* Check responding slave is the slave we requested (except for broacast
      * request) */
+    (void)rsp_length;
     if (req[0] != rsp[0] && req[0] != MODBUS_BROADCAST_ADDRESS) {
         if (ctx->debug) {
             fprintf(stderr,
@@ -903,6 +905,7 @@ static int _modbus_rtu_connect(modbus_t *ctx)
 
 int modbus_rtu_set_serial_mode(modbus_t *ctx, int mode)
 {
+    (void)mode;
     if (ctx == NULL) {
         errno = EINVAL;
         return -1;
@@ -997,6 +1000,7 @@ int modbus_rtu_get_rts(modbus_t *ctx)
 
 int modbus_rtu_set_rts(modbus_t *ctx, int mode)
 {
+    (void)mode;
     if (ctx == NULL) {
         errno = EINVAL;
         return -1;
@@ -1033,6 +1037,7 @@ int modbus_rtu_set_rts(modbus_t *ctx, int mode)
 
 int modbus_rtu_set_custom_rts(modbus_t *ctx, void (*set_rts) (modbus_t *ctx, int on))
 {
+    (void)set_rts;
     if (ctx == NULL) {
         errno = EINVAL;
         return -1;
@@ -1146,6 +1151,7 @@ static int _modbus_rtu_flush(modbus_t *ctx)
 static int _modbus_rtu_select(modbus_t *ctx, fd_set *rset,
                               struct timeval *tv, int length_to_read)
 {
+    (void)rset;
     int s_rc;
 #if defined(_WIN32)
     s_rc = win32_ser_select(&((modbus_rtu_t *)ctx->backend_data)->w_ser,

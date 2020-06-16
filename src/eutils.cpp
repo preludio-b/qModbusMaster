@@ -4,7 +4,7 @@ EUtils::EUtils()
 {
 }
 
-QString EUtils::formatValue(int value,int frmt, bool is16Bit, bool isSigned=false)
+QString EUtils::formatValue(int value,int frmt, bool is16Bit)
 {
     QString convertedValue;
 
@@ -12,35 +12,28 @@ QString EUtils::formatValue(int value,int frmt, bool is16Bit, bool isSigned=fals
 
         case 2://Binary
         if (is16Bit)
-            if (isSigned)
-                convertedValue = QString("%1").arg((signed short)value,16,2,QLatin1Char('0'));
-            else
-                convertedValue = QString("%1").arg((unsigned short)value,16,2,QLatin1Char('0'));
+            convertedValue = QString("%1").arg(value,16,2,QLatin1Char('0')).toUpper();
         else
-
-            convertedValue = QString("%1").arg(value,0,2);
+            convertedValue = QString("%1").arg(value,0,2).toUpper();
         break;
 
         case 10://Decimal - Unsigned Integer
-            if (isSigned)
-                convertedValue = QString("%1").arg((signed short)value,0,10);
-            else
-                convertedValue = QString("%1").arg((unsigned short)value,0,10);
+            convertedValue = QString("%1").arg((unsigned short)value,0,10).toUpper();
         break;
 
         case 16://Hex
-            if (is16Bit)
-                convertedValue = QString("%1").arg(value,4,16,QLatin1Char('0'));
-            else
-                convertedValue = QString("%1").arg(value,0,16);
+        if (is16Bit)
+            convertedValue = QString("%1").arg((unsigned short)value,4,16,QLatin1Char('0')).toUpper();
+        else
+            convertedValue = QString("%1").arg(value,0,16).toUpper();
         break;
 
         default://Default
-        convertedValue = QString("%1").arg(value,0,10);
+        convertedValue = QString("%1").arg(value,0,10).toUpper();
 
     }
 
-    return convertedValue.toUpper();
+    return convertedValue;
 
 }
 

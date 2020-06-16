@@ -12,7 +12,6 @@
 #include "forms/settingsmodbustcp.h"
 #include "forms/settings.h"
 #include "forms/busmonitor.h"
-#include "forms/tools.h"
 #include "modbuscommsettings.h"
 #include "modbusadapter.h"
 #include "infobar.h"
@@ -39,7 +38,6 @@ private:
     SettingsModbusTCP *m_dlgModbusTCP;
     Settings *m_dlgSettings;
     BusMonitor *m_busMonitor;
-    Tools *m_tools;
 
     ModbusCommSettings *m_modbusCommSettings;
     void updateStatusBar();
@@ -58,28 +56,23 @@ private slots:
     void showSettingsModbusTCP();
     void showSettings();
     void showBusMonitor();
-    void showTools();
     void changedModbusMode(int currIndex);
     void changedFunctionCode(int currIndex);
     void changedBase(int currIndex);
-    void changedDecSign(bool value);
     void changedStartAddrBase(int currIndex);
     void changedScanRate(int value);
     void changedConnect(bool value);
     void changedStartAddress(int value);
     void changedNoOfRegs(int value);
-    void changedSlaveID(int value);
+    void changedSlaveIP();
     void addItems();
     void clearItems();
     void openLogFile();
-    void modbusScanCycle(bool value);
-    void modbusRequest();
+    void scan(bool value);
+    void request();
     void refreshView();
     void changeLanguage();
     void openModbusManual();
-    void loadSession();
-    void saveSession();
-    void showHeaders(bool value);
 
 signals:
     void resetCounters();

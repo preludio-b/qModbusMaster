@@ -12,26 +12,16 @@
 
 QTranslator *Translator;
 
-//Logging Levels
-//TraceLevel : 0
-//DebugLevel : 1
-//InfoLevel : 2
-//WarnLevel : 3
-//ErrorLevel : 4
-//FatalLevel : 5
-//OffLevel : 6
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     Translator = new QTranslator;
     Translator->load(":/translations/" + QCoreApplication::applicationName() + "_" + QLocale::system().name());
     app.installTranslator(Translator);
 
     //init the logging mechanism
     QsLogging::Logger& logger = QsLogging::Logger::instance();
-    logger.setLoggingLevel(QsLogging::OffLevel); // start with no logging
+    logger.setLoggingLevel(QsLogging::InfoLevel);
     const QString sLogPath(QDir(app.applicationDirPath()).filePath("QModMaster.log"));
     QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath,true,65535,2));
     QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
@@ -51,5 +41,4 @@ int main(int argc, char *argv[])
     mainWin->show();
 
     return app.exec();
-
 }

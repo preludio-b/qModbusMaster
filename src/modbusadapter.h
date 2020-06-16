@@ -12,13 +12,14 @@ class ModbusAdapter : public QObject
 {
     Q_OBJECT
 public:
-     explicit ModbusAdapter(QObject *parent = 0);
-     ~ModbusAdapter();
-     void busMonitorRequestData(uint8_t * data,int dataLen);
-     void busMonitorResponseData(uint8_t * data,int dataLen);
+    explicit ModbusAdapter(QObject *parent = 0);
+
+     void busMonitorRequestData(uint8_t * data,uint8_t dataLen);
+     void busMonitorResponseData(uint8_t * data,uint8_t dataLen);
 
      void modbusConnectRTU(QString port, int baud, QChar parity, int dataBits, int stopBits, int RTS, int timeOut=1);
      void modbusConnectTCP(QString ip, int port, int timeOut=1);
+     void modbusConnectRTUTCP(QString ip, int port, int timeOut=1);
      void modbusDisConnect();
      RegistersModel *regModel;
      RawDataModel *rawModel;
@@ -36,12 +37,12 @@ public:
      void stopPollTimer();
      int packets();
      int errors();
-     modbus_t * m_modbus;
 
 private:
      void modbusReadData(int slave, int functionCode, int startAddress, int noOfItems);
      void modbusWriteData(int slave, int functionCode, int startAddress, int noOfItems);
      QString stripIP(QString ip);
+     modbus_t * m_modbus;
      bool m_connected;
      int m_ModBusMode;
      int m_slave;
@@ -54,8 +55,6 @@ private:
      int m_errors;
      int m_timeOut;
      bool m_transactionIsPending;
-     uint8_t *dest;
-     uint16_t *dest16;
 
 signals:
     void refreshView();

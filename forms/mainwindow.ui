@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>564</width>
+    <width>500</width>
     <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>564</width>
+    <width>500</width>
     <height>400</height>
    </size>
   </property>
@@ -82,6 +82,11 @@
            <string notr="true">TCP</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string notr="true">RTUTCP</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item>
@@ -103,7 +108,7 @@
           <number>0</number>
          </property>
          <property name="maximum">
-          <number>255</number>
+          <number>247</number>
          </property>
          <property name="value">
           <number>1</number>
@@ -151,7 +156,7 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>36</height>
+        <height>65</height>
        </size>
       </property>
       <property name="frameShape">
@@ -160,14 +165,21 @@
       <property name="frameShadow">
        <enum>QFrame::Sunken</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <layout class="QGridLayout" name="gridLayout">
        <property name="topMargin">
         <number>6</number>
        </property>
        <property name="bottomMargin">
         <number>6</number>
        </property>
-       <item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="cmbFunctionCode">
+         <property name="frame">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
         <widget class="QLabel" name="lblFunctionCode">
          <property name="text">
           <string>Function Code</string>
@@ -180,54 +192,20 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QComboBox" name="cmbFunctionCode">
-         <property name="frame">
-          <bool>true</bool>
+       <item row="0" column="5">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <item>
-          <property name="text">
-           <string>Read Coils (0x01)</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Read Discrete Inputs (0x02)</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Read Holding Registers (0x03)</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Read Input Registers (0x04)</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Write Single Coil (0x05)</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Write Single Register (0x06)</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Write Multiple Coils (0x0f)</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Write Multiple Registers (0x10)</string>
-          </property>
-         </item>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item>
+       <item row="0" column="2">
         <widget class="QLabel" name="lblStartAddress">
          <property name="text">
           <string>Start Address</string>
@@ -240,7 +218,7 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="3">
         <widget class="QSpinBox" name="sbStartAddress">
          <property name="maximum">
           <number>65535</number>
@@ -250,7 +228,7 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="4">
         <widget class="QComboBox" name="cmbStartAddrBase">
          <property name="currentIndex">
           <number>0</number>
@@ -267,41 +245,7 @@
          </item>
         </widget>
        </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QFrame" name="frame_3">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>36</height>
-       </size>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <property name="topMargin">
-        <number>6</number>
-       </property>
-       <item>
+       <item row="1" column="0">
         <widget class="QLabel" name="lblNoOfCoils">
          <property name="text">
           <string>Number of Coils</string>
@@ -310,34 +254,21 @@
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
-          <cstring>sbNoOfRegs</cstring>
+          <cstring>sbNoOfCoils</cstring>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QSpinBox" name="sbNoOfRegs">
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="sbNoOfCoils">
          <property name="minimum">
           <number>1</number>
          </property>
          <property name="maximum">
-          <number>2000</number>
+          <number>65535</number>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="lblDataFormat">
-         <property name="text">
-          <string>Data Format</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="buddy">
-          <cstring>sbStartAddress</cstring>
-         </property>
-        </widget>
-       </item>
-       <item>
+       <item row="1" column="3">
         <widget class="QComboBox" name="cmbBase">
          <property name="currentText">
           <string>Dec</string>
@@ -362,45 +293,32 @@
          </item>
         </widget>
        </item>
-       <item>
-        <widget class="QCheckBox" name="chkSigned">
-         <property name="layoutDirection">
-          <enum>Qt::RightToLeft</enum>
-         </property>
+       <item row="1" column="2">
+        <widget class="QLabel" name="lblDataFormat">
          <property name="text">
-          <string>Signed</string>
+          <string>Data Format</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>sbStartAddress</cstring>
          </property>
         </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
     </item>
     <item>
      <widget class="QTableView" name="tblRegisters">
-      <property name="cornerButtonEnabled">
-       <bool>false</bool>
-      </property>
       <attribute name="horizontalHeaderVisible">
-       <bool>true</bool>
+       <bool>false</bool>
       </attribute>
       <attribute name="horizontalHeaderHighlightSections">
        <bool>true</bool>
       </attribute>
       <attribute name="verticalHeaderVisible">
-       <bool>true</bool>
+       <bool>false</bool>
       </attribute>
       <attribute name="verticalHeaderHighlightSections">
        <bool>true</bool>
@@ -414,17 +332,14 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>564</width>
-     <height>18</height>
+     <width>500</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionLoad_Session"/>
-    <addaction name="actionSave_Session"/>
-    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
@@ -449,9 +364,6 @@
     </property>
     <addaction name="actionOpenLogFile"/>
     <addaction name="actionBus_Monitor"/>
-    <addaction name="actionTools"/>
-    <addaction name="separator"/>
-    <addaction name="actionHeaders"/>
    </widget>
    <widget class="QMenu" name="menuCommands">
     <property name="title">
@@ -463,10 +375,19 @@
     <addaction name="actionClear"/>
     <addaction name="actionReset_Counters"/>
    </widget>
+   <widget class="QMenu" name="menuLanguage">
+    <property name="title">
+     <string notr="true">Language</string>
+    </property>
+    <addaction name="actionSimplified_Chinese_zh_CN"/>
+    <addaction name="actionTraditional_Chinese_zh_TW"/>
+    <addaction name="actionEnglish_en_US"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOptions"/>
    <addaction name="menuCommands"/>
    <addaction name="menuView"/>
+   <addaction name="menuLanguage"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -611,9 +532,6 @@
    <property name="toolTip">
     <string notr="true">简体中文 (zh_CN)</string>
    </property>
-   <property name="visible">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionTraditional_Chinese_zh_TW">
    <property name="icon">
@@ -629,9 +547,6 @@
    <property name="toolTip">
     <string notr="true">繁體中文 (zh_TW)</string>
    </property>
-   <property name="visible">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionEnglish_en_US">
    <property name="icon">
@@ -646,9 +561,6 @@
    </property>
    <property name="toolTip">
     <string notr="true">English (en_US)</string>
-   </property>
-   <property name="visible">
-    <bool>false</bool>
    </property>
   </action>
   <action name="actionOpenLogFile">
@@ -676,45 +588,6 @@
    </property>
    <property name="text">
     <string>Modbus Manual</string>
-   </property>
-  </action>
-  <action name="actionLoad_Session">
-   <property name="icon">
-    <iconset resource="../icons/icons.qrc">
-     <normaloff>:/icons/document-import-16.png</normaloff>:/icons/document-import-16.png</iconset>
-   </property>
-   <property name="text">
-    <string>Load Session...</string>
-   </property>
-  </action>
-  <action name="actionSave_Session">
-   <property name="icon">
-    <iconset resource="../icons/icons.qrc">
-     <normaloff>:/icons/document-export-16.png</normaloff>:/icons/document-export-16.png</iconset>
-   </property>
-   <property name="text">
-    <string>Save Session...</string>
-   </property>
-  </action>
-  <action name="actionHeaders">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../icons/icons.qrc">
-     <normaloff>:/icons/Header16.png</normaloff>:/icons/Header16.png</iconset>
-   </property>
-   <property name="text">
-    <string>Headers</string>
-   </property>
-  </action>
-  <action name="actionTools">
-   <property name="icon">
-    <iconset resource="../icons/icons.qrc">
-     <normaloff>:/icons/tools-16.png</normaloff>:/icons/tools-16.png</iconset>
-   </property>
-   <property name="text">
-    <string>Tools</string>
    </property>
   </action>
  </widget>

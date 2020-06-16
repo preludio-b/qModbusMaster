@@ -37,6 +37,7 @@ BusMonitor::~BusMonitor()
 void BusMonitor::save()
 {
 
+    //qDebug()<<  "BusMonitor : save" ;
 
     //Select file
     QString fileName = QFileDialog::getSaveFileName(NULL,"Save File As...",
@@ -154,9 +155,7 @@ void BusMonitor::parseTxPDU(QStringList pdu, QString slave)
 {
 
     if (pdu.length() < 6){//check message length
-        ui->txtPDU->appendPlainText(slave + pdu[0]);
-        ui->txtPDU->appendPlainText("Function Code : " + pdu[1]);
-        //ui->txtPDU->appendPlainText("Error! Cannot parse Message");
+        ui->txtPDU->appendPlainText("Error! Cannot parse Message");
         return;
     }
     ui->txtPDU->appendPlainText(slave + pdu[0]);
@@ -265,7 +264,7 @@ void BusMonitor::parseRxPDU(QStringList pdu, QString slave)
             return;
         }
         ui->txtPDU->appendPlainText(slave + pdu[0]);
-        ui->txtPDU->appendPlainText("Function Code [80 + Rx Function Code] : " + pdu[1]);
+        ui->txtPDU->appendPlainText("Function Code [80 + SlaveID] : " + pdu[1]);
         ui->txtPDU->appendPlainText("Exception Code : " + pdu[2]);
     }
 

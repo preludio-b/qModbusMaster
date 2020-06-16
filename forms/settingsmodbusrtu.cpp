@@ -9,13 +9,6 @@ SettingsModbusRTU::SettingsModbusRTU(QWidget *parent,ModbusCommSettings * settin
 {
     ui->setupUi(this);
 
-    /* device name is needed only in Linux */
-    #ifdef Q_OS_WIN32
-        ui->cmbDev->setDisabled(true);
-    #else
-        ui->cmbDev->setDisabled(false);
-    #endif
-
     connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(changesAccepted()));
 
 }
@@ -45,7 +38,6 @@ void SettingsModbusRTU::showEvent(QShowEvent * event)
             ui->cmbRTS->addItem("Down");
         #endif
 
-        ui->cmbDev->setCurrentText(m_settings->serialDev());
         ui->sbPort->setValue(m_settings->serialPort().toInt());
         ui->cmbBaud->setCurrentIndex(ui->cmbBaud->findText(m_settings->baud()));
         ui->cmbDataBits->setCurrentIndex(ui->cmbDataBits->findText(m_settings->dataBits()));
@@ -63,7 +55,7 @@ void SettingsModbusRTU::changesAccepted()
     //Save Settings
     if (m_settings != NULL) {
 
-        m_settings->setSerialPort(QString::number(ui->sbPort->value()), ui->cmbDev->currentText());
+        m_settings->setSerialPort(QString::number(ui->sbPort->value()));
         m_settings->setBaud(ui->cmbBaud->currentText());
         m_settings->setDataBits(ui->cmbDataBits->currentText());
         m_settings->setStopBits(ui->cmbStopBits->currentText());

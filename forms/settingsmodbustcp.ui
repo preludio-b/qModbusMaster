@@ -18,7 +18,7 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>240</width>
+    <width>300</width>
     <height>160</height>
    </size>
   </property>
@@ -26,7 +26,7 @@
    <string>Modbus TCP Settings</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../data/qModMaster.qrc">
     <normaloff>:/img/network-16.png</normaloff>:/img/network-16.png</iconset>
   </property>
   <property name="modal">
@@ -89,7 +89,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../data/qModMaster.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

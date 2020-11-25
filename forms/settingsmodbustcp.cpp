@@ -20,13 +20,12 @@ SettingsModbusTCP::~SettingsModbusTCP()
 
 void SettingsModbusTCP::showEvent(QShowEvent * event)
 {
-
+    Q_UNUSED(event);
     //Load Settings
     if (m_settings != NULL) {
         ui->leTCPPort->setText(m_settings->TCPPort());
         ui->leSlaveIP->setText(m_settings->slaveIP());
     }
-
 }
 
 void SettingsModbusTCP::changesAccepted()

@@ -20,7 +20,7 @@ SettingsModbusRTU::~SettingsModbusRTU()
 
 void SettingsModbusRTU::showEvent(QShowEvent * event)
 {
-
+    Q_UNUSED(event);
     //Load Settings
     if (m_settings != NULL) {
 

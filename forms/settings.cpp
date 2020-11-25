@@ -20,14 +20,13 @@ Settings::~Settings()
 
 void Settings::showEvent(QShowEvent * event)
 {
-
+    Q_UNUSED(event);
     //Load Settings
     if (m_settings != NULL) {
         ui->sbMaxNoOfRawDataLines->setValue(m_settings->maxNoOfLines().toInt());
         ui->sbResponseTimeout->setValue(m_settings->timeOut().toInt());
         ui->sbBaseAddr->setValue(m_settings->baseAddr().toInt());
     }
-
 }
 
 void Settings::changesAccepted()

@@ -87,6 +87,7 @@ DEFINES += QS_LOG_LINE_NUMBERS     # automatically writes the file and line for 
 #DEFINES += QS_LOG_DISABLE         # logging code is replaced with a no-op
 #DEFINES += QS_LOG_SEPARATE_THREAD # messages are queued and written from a separate thread
 #DEFINES += LIB_MODBUS_DEBUG_OUTPUT # enable debug output from libmodbus
+macx:DEFINES += HAVE_STRLCPY
 
 FORMS    += forms/mainwindow.ui \
     forms/about.ui \
@@ -98,21 +99,3 @@ FORMS    += forms/mainwindow.ui \
 RESOURCES += \
     icons/icons.qrc \
     translations/translations.qrc
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
